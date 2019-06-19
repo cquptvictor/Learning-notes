@@ -120,5 +120,16 @@ spring从两个角度来实现自动化装配
 
 - spring.profiles.active：配置激活哪些profile，优先级最高
 - spring.profiles.default：配置默认激活的profile
-
 - 多种方式设置这两个属性：例如在WEB.xml文件中设置
+
+### 条件化Bean
+
+- 只有在给定条件的计算结果为true时，才会创建这个bean
+
+### 处理自动装配的歧义性
+
+#### 设置首选的bean
+
+- XML配置：bean标签中设置primary属性
+- 注解配置：@Primary
+
