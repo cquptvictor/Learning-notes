@@ -43,6 +43,7 @@ spring从两个角度来实现自动化装配
 - 用在构造器和Setter方法上会自动装配参数上所需要的依赖
 - 用在属性上会自动装配，可以不用写Setter方法了
 - 默认为Required为true，没有匹配的bean会抛出异常；找到多个满足依赖的bean也会抛异常
+- 默认为ByType自动连接
 
 ## 基于Java代码的装配
 
@@ -128,8 +129,17 @@ spring从两个角度来实现自动化装配
 
 ### 处理自动装配的歧义性
 
+- byType自动连接可能有多个候选项
+
 #### 设置首选的bean
 
 - XML配置：bean标签中设置primary属性
 - 注解配置：@Primary
+
+#### 限定自动装配的bean
+
+- Qualifer配置ID
+- Qualifer指定装配的ID
+
+### Bean的作用域
 
