@@ -213,11 +213,12 @@ public extraMethod loggingExtraMethod;//这必须是一个接口类型
 ```
 
 - @DeclareParents注解所标注的静态属性指明了要引入的接口
-
 - defaultImpl指定了接口的默认实现类
-
 - value指定了哪种类型的bean要引入该接口
-
 - @DeclareParents注解修饰的是一个属性，一个类型为接口的属性
 
-  
+## 切面的优先级
+
+- 通过@Order设置优先级
+- 数值越小（可以是负数），优先级越大
+
