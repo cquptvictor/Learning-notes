@@ -103,8 +103,8 @@
 
 ### @SessionAttribute
 
-- 只能修饰类
-- ModelMap设置值的时候，将模型数据也加入Session中
+- 只能修饰类或者接口
+- 在方法中，ModelMap设置值的时候，如果，模型数据的key与@SessionAttributes的value相同，则将模型数据同时添加到Session中
 - 可以根据name来放入，也可以同时根据type来放入
 
 ## @ModelAttribute
@@ -126,3 +126,132 @@
 - @RequestMapping方法的返回值将会被解释为model的一个属性，而非一个视图名，此时视图名将以视图命名约定来方式来确定。
 
 - 应用场景：要修改一个对象的几个值（有一部分值不变），如果传入一个对象给mybatis，那样会直接修改了所有值；需要在映射表单值之前读取原来的对象，然后新值覆盖掉旧值
+
+## 视图解析流程
+
+- 不管是view，String，ModelAndView都会被转化为ModelAndView交由ViewResolver处理
+
+## 配置URL直接访问页面
+
+- 配置\<mvc:view-controller/\>标签
+- 需要同时有\<mvc:annotation-driven\>标签，否则要经过Servlet的访问就会404
+
+## 转发与重定向
+
+- 方法的返回值为String
+- `redirect:`：代表重定向
+- `forward:`：代表转发
+
+## 自定义类型转换器
+
+1. 实现Converter<>接口，实现convert方法
+2. 在dispatcher.xml配置文件中注册相应的自定义转换器bean，或者使用注解
+3. 在ConversionServiceFactoryBean容器中注册converters
+4. 在mvc:annotation-driven中配置ConversionServiceFactoryBean
+
+### converter与formatter
+
+- formatter只能把String转化为其他类型，是专门针对于Web层的
+
+## \<mvc:annotaion-driven\\>
+
+- 会自动注册RequestMappingHandlerMapping、RequestMappingHandlerAdapter和ExceptionHandlerExceptionResolver
+- 支持使用ConversionService实例对表单参数进行类型转换
+- 支持使用@DateFormat和@NumberFormat注解完成数据类型的格式化
+- 支持使用@Valid注解对JavaBean实例进行JSR303验证
+- 支持使用@RequestBody注解
+
+## @InitBinder注解
+
+- 对WebDataBinder对象进行初始化，WebDataBinder是DataBinder的子类用于完成由表单字段到JavaBean属性的绑定 
+- @InitBinder注解修饰的方法不能有返回值
+- @InitBinder注解修饰的方法通常是WebDataBinder
+
+## @DateFormat和@NumberForamt
+
+- 需要先配置\<mvc:annoitation-driven\>
+- 在目标属性上使用这个注解
+- 指定pattern
+
+## 数据校验
+
+- JSR303：是Java为Bean数据合法性校验提供的标准，Hibernate Validator是它的实现
+- 需要使用validation-api、hibernate-validator和el-api
+- 需要校验的pojo和错误绑定中间补鞥呢有其他参数
+
+## HttpMessageConverter\<T\>
+
+![1562584569158](C:\Users\victor\AppData\Roaming\Typora\typora-user-images\1562584569158.png)
+
+- 是Spring3.0后新添加的一个接口，实际工作是由接口的各种实现类来完成
+- 负责将请求信息转换为一个对象，或将对象输出为响应信息
+
+### @RequestBody与@ResponseBody
+
+- @RequestBody：用于入参，获取请求体
+- @ResponseBody：用在方法上，直接返回json结果
+
+### HttpEntity\<T\>和ResponseEntity\<T\>
+
+- HttpEntity：作为入参的参数类型，获取请求体和请求头
+- ResponseEntity：当做返回值，来设置响应头、响应体；可以用来进行文件下载
+
+## 文件上传
+
+- SpringMVC通过MultipartResolver接口来实现文件上传，提供了CommonsMultipartResolver和StanderdServletMultipartResolver的实现类
+- 直接在dispatcher.xml中配置相关信息就可以了
+
+## 拦截器
+
+- 需要实现HandlerInterceptor接口
+- 在配置文件中配置\<mvc:interceptors\>下的\<bean/\>子标签
+- 子标签\<mvc:interceptor\>能够指定拦截某些URL，或者指定不拦截某些URL
+
+### 拦截器的三个方法
+
+- preHandle:在进入handler之前调用，false就停止执行，true继续执行；权限验证，日志，事务
+- postHandle：在渲染视图前调用；对请求域中的属性和视图进行修改
+- afterCompletion：在handler执行完毕后调用；释放资源
+- 多个拦截器，第一个方法正序执行，后两个方法逆序执行
+- 第一个方法执行如果遇见false，立即停止，按序执行后两个方法
+
+## 异常处理
+
+- SpringMVC通过HandlerExceptionResolver接口的实现类来对异常进行处理
+- 在配置\<mvc:annotation-drivent\>会默认注册三个实现类
+
+### ExceptionHandlerExceptionResolver
+
+- 使用@ExceptionHandler注解标记方法
+- 方法的入参类型决定了能处理哪些异常，比如说接收Exception类型，就能处理所有的异常
+- 如果想传值给前端，只能使用ModelAndView和Model，不能使用Map
+- 优先匹配更相近的处理方法
+
+#### 统一异常处理类
+
+- 把异常处理统一在一个类中
+- 这个类需要用@ControllerAdvice标记，类中方法和普通处理一样
+- 先在发生异常的类中找@ExceptionHandler方法，找不到才会去全局异常处理类中寻找
+
+### ResponseStatusExceptionResolver
+
+- 使用@ResponseStatus来标记类，或者方法
+- 接收一个value=状态码，reason
+
+#### 标识在方法上
+
+- 不管是否有错，都会返回注解中设定的状态码
+
+#### 标识在类上
+
+- 这个类通常是自定义的异常类
+- 当我们抛出自定义的异常类的时候页面就会显示设定的状态码和reason
+
+### DefaultHandlerExceptionResolver
+
+- 对一些特殊的异常进行处理
+
+## SimpleMappingExceptionResolver
+
+- 对所有异常进行全局统一处理
+- 在XML中配置指定的异常，和需要转到的页面
