@@ -255,3 +255,19 @@
 
 - 对所有异常进行全局统一处理
 - 在XML中配置指定的异常，和需要转到的页面
+
+## SpringMVC运行流程
+
+![img](https://lvshen9.github.io/blog2/pay/sprigmvc.png)
+
+## SpringMVC与Spring的整合
+
+- 通常情况下，类似于数据、事务，整合其他框架都是配置在Spring的配置文件中，以及Service和Dao
+-  在web.xml中进行如下配置：
+
+```
+<context-param>  
+	<param-name>contextConfigLocation</param-name>    
+	<param-value>classpath:applicationContext.xml</param-value>//指定Spring配置文件的位置
+</context-param>
+```
