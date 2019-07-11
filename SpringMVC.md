@@ -81,7 +81,7 @@
 ## POJO映射
 
 - 自动映射POJO对象，支持级联属性
-- 对于级联属性，表单要是nameclass.attribute`
+- 对于级联属性，表单要是`nameclass.attribute`
 
 ## Servlet原生API入参
 
@@ -89,6 +89,8 @@
 - 支持9种原生API
 
 ## 处理模型数据
+
+![img](http://dl2.iteye.com/upload/attachment/0126/5987/86aa4a3b-6d7b-348c-900a-4bfbaa9bcd2d.png)
 
 ### ModelAndView
 
@@ -181,7 +183,7 @@
 
 ## HttpMessageConverter\<T\>
 
-![1562584569158](C:\Users\victor\AppData\Roaming\Typora\typora-user-images\1562584569158.png)
+![âSpringMVCçHttpMessageConverterâçå¾çæç´¢ç»æ](http://static.oschina.net/uploads/space/2013/1026/091627_zgNV_118997.png)
 
 - 是Spring3.0后新添加的一个接口，实际工作是由接口的各种实现类来完成
 - 负责将请求信息转换为一个对象，或将对象输出为响应信息
@@ -258,7 +260,11 @@
 
 ## SpringMVC运行流程
 
-![img](https://lvshen9.github.io/blog2/pay/sprigmvc.png)
+
+
+![âSpringMVCçæ§è¡æµç¨å¾âçå¾çæç´¢ç»æ](https://lvshen9.github.io/blog2/pay/sprigmvc.png)
+
+![âSpringMVCçæ§è¡æµç¨å¾âçå¾çæç´¢ç»æ](https://upload-images.jianshu.io/upload_images/5220087-d2a2c47dc335e91b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/864/format/webp)
 
 ## SpringMVC与Spring的整合
 
@@ -271,3 +277,11 @@
 	<param-value>classpath:applicationContext.xml</param-value>//指定Spring配置文件的位置
 </context-param>
 ```
+
+- 如果SpringMVC和Spring扫描的包有重合，则重合的bean会被生成两次
+- 通过使用exclude-filter和include-filter来规定各自需要扫描的注解
+
+## SpringMVC的IOC和Spring的IOC
+
+- SpringMVC的IOC容器可以引用Spring的IOC容器中的bean，反之则不行
+
