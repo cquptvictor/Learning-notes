@@ -18,7 +18,7 @@
 
 - `<environments default="" />` :设置多个环境，通过default来切换环境
 - `<enviroment>:`配置连接哪个数据库，是否使用连接池，事务配置等；需要id来标识
-- 使用 `<properties url = "" or resource="" />` 标签引入外部properties文件，${}来取值，url是绝对路径或网络路径，resource的类相对路径
+- 使用 `<properties url = "" or resource="" />` 标签引入外部properties文件，${}来取值，url是绝对路径或网络路径，resource是类相对路径
 
 #### settings标签
 
@@ -57,22 +57,24 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 
 ### 映射配置文件
 
-- `<resultMap>`:配置实体与数据库的表的映射;<id>映射主键;<result>映射非主键属性； #{}为占位符
+- `<resultMap/>`:配置实体与数据库的表的映射;\<id/\>映射主键;\<result/\>映射非主键属性； #{}为占位符
 - 写SQL语句
 - `<mapper namespace="">`:需要在namespace中声明唯一命名空间
 - ParameterType为Boolean时，受影响的行数超过0就返回True，0行返回false
-
-
 
 ## CRUD
 
 默认需要手动提交
 
+- id：根据id来调用的SQL语句
+- parameterType:传入参数的数据类型，可以不写，自动判断
+- resultMap:返回值类型，应该为resultMap映射相应对象时设置的id
+- 返回的是List，返回值类型写为集合中元素的对象
+- 如果返回值`Map<String,User>`，只能有一条返回值,{key=value,key=value}；`List<Map>`可以返回多条
+- @MapKey指定返回值的key是pojo的哪个属性，key重复会发生覆盖；{key = User{ }};加上注解后，相当于map中的map
+- 如果查询出来的对象不止一个，例如`List<Student>`，那么只用写一个就可以了，调用时应使用selectList
+
 ### 增
-
-id：根据id来调用的SQL语句
-
-
 
 ```
 <insert id="add" parameterType="domain.Student">
@@ -81,15 +83,6 @@ id：根据id来调用的SQL语句
 ```
 
 ### 查
-
-- parameterType:传入参数的数据类型，可以不写，自动判断
-- resultMap:返回值类型，应该为resultMap映射相应对象时设置的id
-- 返回的是List，返回值类型写为集合中元素的对象
-- 如果返回值`Map<String,User>`，只能有一条返回值,{key=value,key=value}；`List<Map>`可以返回多条
-- @MapKey指定返回值的key是pojo的哪个属性，key重复会发生覆盖；{key = User{ }};加上注解后，相当于map中的map
-- 如果查询出来的对象不止一个，例如`List<Student>`，那么只用写一个就可以了，调用时应使用selectList
-
-
 
 
 ```
@@ -107,8 +100,6 @@ id：根据id来调用的SQL语句
 ```
 
 ### 改
-
-
 
 ```
 <update id="update" parameterType="domain.Student">

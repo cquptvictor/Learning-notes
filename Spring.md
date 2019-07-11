@@ -36,6 +36,11 @@ spring从两个角度来实现自动化装配
 - 基于注解：@ConponentScan默认会扫描与配置类相同的包，以及子包
 - bean的默认id为类名的第一个字母小写
 
+### 过滤扫描的内容
+
+- \<context:component-scan base-package=""/\>的子标签\<context:exclude-filter/\>和\<context:include-filter\>指定需要扫描的bean
+- 可以通过注解、类名和正则来过滤
+
 ### 自动装配
 
 #### @Autowired
