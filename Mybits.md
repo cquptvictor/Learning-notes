@@ -287,10 +287,19 @@ keyProperty代表将自增主键赋值给pojo的哪个属性
 - true：返回的是缓存对象的引用，速度快，用于缓存对象不需要改变的时候
 - false：返回的是缓存对象的拷贝，速度相对较慢，更加安全
 
+#### type
+
+- 指定第三方cache
+
 ### 与缓存有关的标签
 
 - 全局配置文件中cacheEnabled：false会关闭二级缓存，但不影响一级缓存
 - 每个增删改标签中useCache：false会不使用二级缓存，但不影响一级缓存
-- flushCache：执行了sql语句后会清除一级和二级缓存，增删改操作默认为true
+- flushCache：执行了sql语句后会清除一级和二级缓存，增删改操作会清除一二级缓存 
 - SqlSession.clearCache()：只会清除一级缓存
 - localCacheScope：默认为Session作用域，即基于sqlSession的一级缓存；设置为Statement表示不使用一级缓存
+
+## Mybatis与Spring的整合
+
+- 需要mybatis-spring包
+- 在Spring配置文件中通过\<mybatis-spring:scan  base-package = \>来进行扫描mybatis的接口
