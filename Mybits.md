@@ -6,38 +6,30 @@
 2. 执行statement时存在硬编码
 3. 频繁的开闭数据库连接，会影响数据库的性能。
 
-## Mybaits的配置文件
+## Configuration
 
-### Hello Mybatis
+### properties标签
 
-1. 创建全局配置文件
-2. 根据配置文件创建SqlSessionFactory
-3. 通过SqlSessionFactory创建SqlSession（非线程安全）来执行映射的SQL语句
+- 引入外部的properties文件，通过${}来取值，通常数据库连接信息的配置就放在.properties文件中
 
-### 全局配置文件
+### settings标签
 
-- `<environments default="" />` :设置多个环境，通过default来切换环境
-- `<enviroment>:`配置连接哪个数据库，是否使用连接池，事务配置等；需要id来标识
-- 使用 `<properties url = "" or resource="" />` 标签引入外部properties文件，${}来取值，url是绝对路径或网络路径，resource是类相对路径
+- 主要用于配置的设定
 
-#### settings标签
+### typeAliase标签
 
-配置一些参数
+- `<typeAliases>`: 单独配置类的别名，或者@Alias注解配置别名，默认为类名
+- 通过package标签批量配置别名，但是要注意子包下相同类名的冲突，默认为首字母小写的类名
 
-```
-<settings>
+### typeHandlers标签
 
-<setting name = "" value=""/>
+- 配置类型处理器，用于将数据库取出来的值转换为相应的Java类型
+- 实现`org.apache.ibatis.type.TypeHandler` 接口，或继承org.apache.ibatis.type.BaseTypeHandler类来完成自己的类型处理器
 
-</settings>
-```
+## 环境配置
 
-#### Mybatis配置别名
-
-- `<typeAliases>`: 单独配置类的别名，或者@Alias注解配置别名
-- 配置的别名对namespace无效，namespace任然要使用全类名
-- 通过package标签批量配置别名，但是要注意子包下相同类名的冲突
-- 无论是批量配置还是单独配置，别名都不区分大小写；且默认为类名
+- 可以同时设置多个环境，但是需要指定一个默认的环境
+- 一个SqlSessionFactory只能对应一种环境
 
 #### transactionManager
 
@@ -48,33 +40,29 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 - type有UNPOOLED,POOLED,JNDI
 - 如果要使用自定义的数据源，实现DataSource接口，方法返回自定义的数据源,type是全类名
 
-#### mappers
+## mappers标签
 
 - 引入映射文件
 - resource、class、url三种注册方式
 - `<package name=""/>`:进行批量注册
 - class方式注册非注解接口时，接口与对应的XML需在同一个包下
 
-### 映射配置文件
+## 映射配置文件
 
-- `<resultMap/>`:配置实体与数据库的表的映射;\<id/\>映射主键;\<result/\>映射非主键属性； #{}为占位符
-- 写SQL语句
-- `<mapper namespace="">`:需要在namespace中声明唯一命名空间
-- ParameterType为Boolean时，受影响的行数超过0就返回True，0行返回false
+### 增删改标签
 
-## CRUD
+- id：在命名空间中唯一的标识符。可以用来调用的SQL语句
+- parameterType：传入参数的数据类型，可以不写，自动判断
+- resultType：从这条语句中返回的期望类型的类的完全限定名或别名
+- resultMap：外部映射的引用
+- 返回值为int，返回受影响的行数
+- 返回值是Boolean，返回执行的结果
+
+### CRUD
 
 默认需要手动提交
 
-- id：根据id来调用的SQL语句
-- parameterType:传入参数的数据类型，可以不写，自动判断
-- resultMap:返回值类型，应该为resultMap映射相应对象时设置的id
-- 返回的是List，返回值类型写为集合中元素的对象
-- 如果返回值`Map<String,User>`，只能有一条返回值,{key=value,key=value}；`List<Map>`可以返回多条
-- @MapKey指定返回值的key是pojo的哪个属性，key重复会发生覆盖；{key = User{ }};加上注解后，相当于map中的map
-- 如果查询出来的对象不止一个，例如`List<Student>`，那么只用写一个就可以了，调用时应使用selectList
-
-### 增
+#### 增
 
 ```
 <insert id="add" parameterType="domain.Student">
@@ -82,7 +70,7 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 </insert>
 ```
 
-### 查
+#### 查
 
 
 ```
@@ -91,7 +79,7 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 </select>
 ```
 
-### 删
+#### 删
 
 ```
 <delete id ="delete" parameterType="int">
@@ -99,7 +87,7 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 </delete>
 ```
 
-### 改
+#### 改
 
 ```
 <update id="update" parameterType="domain.Student">
@@ -110,53 +98,52 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 - 实体的属性不一定要全部应用到参数上，如果id设置为自增的，SQL插入语句去掉id，传入Student为参数也同样能够成功
 - 增删改可以用相同的XML标签
 
-## Mybatis接口式编程
+#### useGeneratedKeys和keyProperty
 
-- 定义一个接口；mappings文件的namespace是接口的全类名，方法的id是接口的方法名
-- 这样传入的参数具有类型检查，而不是Object
-- 基本类型使用包装类，来避免空指针错误
+- 仅对update和insert语句有效
+- useGeneratedKeys： MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键
+- keyProperty：唯一标记一个属性，MyBatis 会通过 getGeneratedKeys 的返回值或者通过 insert 语句的 selectKey 子元素设置它的键值
+- 合在一起使用可以把自增主键的值赋值给pojo对应自增主键的属性
 
-## #{}占位符
+### 参数
 
-- 单个参数时括号中随便写一个名字，但不能为空
-- 多个参数会被封装成一个Map，key为param1——paramN，可以通过@Param来指定key
-- 如果多个参数中有pojo，也有基本数据类型,paramN.Property来获得pojo中的值
-- 如果参数为List，Set，数组，也会被封装成Map，通过collection[i],array[i],list[i]来获得值，也可以通过@Param来指定key
-- 在参数是Map时，括号中为Map的key值
-- 在参数是pojo时，括号中为pojo的属性名
+- 通过#{property,javaType=int,jdbcType=NUMERIC}来置入参数
+- 通常不需要后两者，除非是HashMap
 
-## #{}和${}的区别与联系
+### 结果映射
 
-- #{}和${}的使用方法没有什么区别
-- #{}采用JDBC的预编译形式
-- ${}是字符串拼接，并且会转义危险的输入值
-- ${}通常用于对表名，字段名，排序字段等不能预编译的字段进行占位处理
+- 对于复杂的映射需要使用resultMap，把列名映射到属性上
+- id：映射主键，有助于提高整体性能
+- result：映射普通属性
+- constructor：实例化类时，注入结果到构造方法中，通常用于不可变类
+- `collection` ： 一个复杂类型的集合
+- `association` ： 一个复杂类型的关联；许多结果将包装成这种类型
 
-## 获取自增主键
+### 关联
 
-```
-<insert id="addMember" parameterType="User" useGeneratedKeys="true" keyProperty="id" >
-```
+- 通过association标签实现
 
-keyProperty代表将自增主键赋值给pojo的哪个属性
+#### 嵌套Select查询
+
+- select：指定嵌套的语句ID
+- column：数据库中的列名，或者是列的别名，当做参数传给第二个查询
+- column="{prop1=col1,prop2=col2}"：针对于复合主键
+- 延迟加载来提升性能
+
+#### 嵌套结果
+
+- 在一个resultMap中放入association子标签，子标签内部设置另一个resultMap
+- 如果不打算重用子resultMap，可以直接把结果映射作为子元素嵌套在内
 
 ## 自动映射
 
 1. 全局设置autoMappingBehavior,默认为Partial，开启自动映射，null为关闭自动映射
-2. a_cloumn -> aColumn符合驼峰命名法，mapUnderscoreToCamelCase=true,开启驼峰映射
-3. resultMap进行自定义映射
+2. MyBatis 会获取结果中返回的列名并在 Java 类中查找相同名字的属性（忽略大小写）
+3. a_cloumn -> aColumn符合驼峰命名法，mapUnderscoreToCamelCase=true,开启驼峰映射
+4. resultMap进行自定义映射
+5. 列名和属性名没有精准匹配，可以在sql语句中使用别名
 
-### 延迟加载
-
-  Mybatis的延迟加载是针对嵌套查询而言的，是指在进行查询的时候先只查询最外层的SQL，对于内层SQL将在需要使用的时候才查询出来
-
-## resultMap
-
-- `<id>:`映射主键;
-- `<result>:`映射非主键属性；
-- 可以只自定义一部分，剩下的按照规则1,2进行匹配
-
-#### 应用
+## ResualtMap的应用
 
 ##### 返回的pojo对象的某些属性类型是另一个pojo
 
@@ -217,12 +204,35 @@ keyProperty代表将自增主键赋值给pojo的哪个属性
 - 外层的属性需要是一样的，内层属性不同，才能把内层封装为一个List，外层一样的话会报selectOne错误
 - 可以通过select 和 cloumn属性来进行分步查询
 
-## Collection和association总结
+## collection和association总结
 
 - association用于一对一的情况
 - 三种使用方式：分步查询，嵌套resultMap（复用版与非复用版）
 - collection适用于一对多的情况
 - 三种使用方式：分步查询，嵌套resultMap（复用版与非复用版）
+
+## Mybatis接口式编程
+
+- 定义一个接口；mappings文件的namespace是接口的全类名，方法的id是接口的方法名
+- 这样传入的参数具有类型检查，而不是Object
+- IDE可以进行代码补全
+- 基本类型使用包装类，来避免空指针错误
+
+## #{}占位符
+
+- 单个参数时括号中随便写一个名字，但不能为空
+- 多个参数会被封装成一个Map，key为param1——paramN，可以通过@Param来指定key
+- 如果多个参数中有pojo，也有基本数据类型,paramN.Property来获得pojo中的值
+- 如果参数为List，Set，数组，也会被封装成Map，通过collection[i],array[i],list[i]来获得值，也可以通过@Param来指定key
+- 在参数是Map时，括号中为Map的key值
+- 在参数是pojo时，括号中为pojo的属性名
+
+## #{}和${}的区别与联系
+
+- #{}和${}的使用方法没有什么区别
+- #{}采用JDBC的预编译形式
+- ${}是字符串拼接，并且会转义危险的输入值
+- ${}通常用于对表名，字段名，排序字段等不能预编译的字段进行占位处理
 
 ## Mybatis缓存机制
 
@@ -295,11 +305,19 @@ keyProperty代表将自增主键赋值给pojo的哪个属性
 
 - 全局配置文件中cacheEnabled：false会关闭二级缓存，但不影响一级缓存
 - 每个增删改标签中useCache：false会不使用二级缓存，但不影响一级缓存
-- flushCache：执行了sql语句后会清除一级和二级缓存，增删改操作会清除一二级缓存 
+- flushCache：执行了sql语句后会清除一级和二级缓存，对于select默认为false，对于增删改默认为true
 - SqlSession.clearCache()：只会清除一级缓存
 - localCacheScope：默认为Session作用域，即基于sqlSession的一级缓存；设置为Statement表示不使用一级缓存
+- `cache-ref`：对其它Cache配置的引用
 
 ## Mybatis与Spring的整合
 
 - 需要mybatis-spring包
 - 在Spring配置文件中通过\<mybatis-spring:scan  base-package = \>来进行扫描mybatis的接口
+
+## 作用域和生命周期
+
+- SqlSessionFactoryBuilder：一旦创建了SqlSessionFactory就不需要它了，最好是局部方法变量
+- SqlSessionFactory：单例作用域
+- SqlSession：非线程安全，请求作用域或方法作用域
+- 映射器实例：方法作用域，最大作用域是和SqlSession相同
