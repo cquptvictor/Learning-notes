@@ -135,6 +135,12 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 - 在一个resultMap中放入association子标签，子标签内部设置另一个resultMap
 - 如果不打算重用子resultMap，可以直接把结果映射作为子元素嵌套在内
 
+### 集合
+
+- 通过collection标签来实现
+- 使用方法和association很相似
+- ofType：表示集合中内容的类型
+
 ## 自动映射
 
 1. 全局设置autoMappingBehavior,默认为Partial，开启自动映射，null为关闭自动映射
@@ -145,7 +151,7 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 
 ## ResualtMap的应用
 
-##### 返回的pojo对象的某些属性类型是另一个pojo
+### 返回的pojo对象的某些属性类型是另一个pojo
 
 1.使用级联属性
 
@@ -187,9 +193,8 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 
 - 传多个参数的时候封装成map,`column = "{key = value}"`
 
-  
 
-##### collection标签定义集合封装规则
+### collection标签定义集合封装规则
 
 ```
 <collection property="userAll" ofType="user"  fetchType="lazy">
@@ -204,7 +209,7 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 - 外层的属性需要是一样的，内层属性不同，才能把内层封装为一个List，外层一样的话会报selectOne错误
 - 可以通过select 和 cloumn属性来进行分步查询
 
-## collection和association总结
+### collection和association总结
 
 - association用于一对一的情况
 - 三种使用方式：分步查询，嵌套resultMap（复用版与非复用版）
