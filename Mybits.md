@@ -143,9 +143,9 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 
 ## 自动映射
 
-1. 全局设置autoMappingBehavior,默认为Partial，开启自动映射，null为关闭自动映射
-2. MyBatis 会获取结果中返回的列名并在 Java 类中查找相同名字的属性（忽略大小写）
-3. a_cloumn -> aColumn符合驼峰命名法，mapUnderscoreToCamelCase=true,开启驼峰映射
+1. 全局设置autoMappingBehavior,默认为Partial，对除了嵌套映射之外的属性进行自动映射，null为关闭自动映射
+2. 当自动映射查询结果时，MyBatis 会获取结果中返回的列名并在 Java 类中查找相同名字的属性（忽略大小写）
+3. a_cloumn -> aColumn符合驼峰命名法，mapUnderscoreToCamelCase=true,开启驼峰自动映射
 4. resultMap进行自定义映射
 5. 列名和属性名没有精准匹配，可以在sql语句中使用别名
 
@@ -192,7 +192,6 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 - column：第一次查询出来的列作为参数传入分步查询
 
 - 传多个参数的时候封装成map,`column = "{key = value}"`
-
 
 ### collection标签定义集合封装规则
 

@@ -1,6 +1,6 @@
 # Spring
 
-## IOC
+# IOC
 
 ### spring容器的实现
 
@@ -21,96 +21,96 @@
 - 基于XML：`<bean id = "" class=""/>`
 - 基于注解:@Conponent以及它的三个版型:@Controller,@Service,@Dao
 
-# 装配Bean
+## 装配Bean
 
-## 自动化装配bean
+### 自动化装配bean
 
 spring从两个角度来实现自动化装配
 
 - 组件扫描：Spring会自动发现应用上下文中锁创建的bean
 - 自动装配：Spring自动满足bean之间的依赖
 
-### 组件扫描
+#### 组件扫描
 
 - 基于XML：`<context:component-scan base-package=""/>`
 - 基于注解：@ConponentScan默认会扫描与配置类相同的包，以及子包
 - bean的默认id为类名的第一个字母小写
 
-### 过滤扫描的内容
+#### 过滤扫描的内容
 
 - \<context:component-scan base-package=""/\>的子标签\<context:exclude-filter/\>和\<context:include-filter\>指定需要扫描的bean
 - 可以通过注解、类名和正则来过滤
 
-### 自动装配
+#### 自动装配
 
-#### @Autowired
+##### @Autowired
 
 - 用在构造器和Setter方法上会自动装配参数上所需要的依赖
 - 用在属性上会自动装配，可以不用写Setter方法了
 - 默认为Required为true，没有匹配的bean会抛出异常；找到多个满足依赖的bean也会抛异常
 - 默认为ByType自动连接
 
-## 基于Java代码的装配
+#### 基于Java代码的装配
 
 对于第三方的代码只能通过Java装配或XML装配了，通常会把JvaConfig放在单独的包中
 
 配置灵活，只会受到Java语言本身的限制
 
-### @Configuration
+##### @Configuration
 
 - 表明标注的类是一个配置类
 
-### @Bean
+##### @Bean
 
 - 表明该方法会返回一个注册在Spring应用上下文中的bean，方法体中是产生bean的逻辑实现
 - bean的id可以注解中设置，也可以默认为方法名（不会首字母变为小写了）
 
-## 通过XML代码装配Bean
+#### 通过XML代码装配Bean
 
-### 注册一个bean
+##### 注册一个bean
 
 - `<bean id = "" class = ""/>`默认id为全类名+#0,数字用来计数相同类型的其他Bean
 
-### 构造器初始化
+##### 构造器初始化
 
 - `<constructor-arg ref = />` ,`<constructor-arg value = />`
 
-### Setter注入
+##### Setter注入
 
 - 通常来说强依赖使用构造器注入，可选依赖使用属性注入
 - `<property name = value = />`
 
-## 自动扫描和@Bean以及XML
+#### 自动扫描和@Bean以及XML
 
 - 两者都是向Spring上下文中注册bean
 - 前者只是单纯的注册bean，后者还有注册的这个bean的实现逻辑
 - 如果是第三方类，我们就只能通过@Bean来实现或者是XML来实现
 
-## 混合配置
+### 混合配置
 
-### JavaConfig互相混合
+#### JavaConfig互相混合
 
 - `@Import({})`
 
-### JavaConfig中导入XML
+#### JavaConfig中导入XML
 
 - `@ImportResource()`
 
-### XML中导入JavaConfig
+#### XML中导入JavaConfig
 
 - `<bean class=/>`和普通的bean注册没有什么不同
 
-### XML互相混合
+#### XML互相混合
 
 - `<import resource=/>`
 
-## 高级装配
+### 高级装配
 
-### profile切换环境
+#### profile切换环境
 
 - Spring只会创建profile激活的bean
 
-#### Profile配置
+##### Profile配置
 
 - XML配置:在beans标签中嵌套beans
 
@@ -122,44 +122,44 @@ spring从两个角度来实现自动化装配
 
 - 注解配置：`@Profile`
 
-#### Profile激活
+##### Profile激活
 
 - spring.profiles.active：配置激活哪些profile，优先级最高
 - spring.profiles.default：配置默认激活的profile
 - 多种方式设置这两个属性：例如在WEB.xml文件中设置
 
-### 条件化Bean
+##### 条件化Bean
 
 - 只有在给定条件的计算结果为true时，才会创建这个bean
 
-### 处理自动装配的歧义性
+##### 处理自动装配的歧义性
 
 - byType自动连接可能有多个候选项
 
-#### 设置首选的bean
+##### 设置首选的bean
 
 - XML配置：bean标签中设置primary属性
 - 注解配置：@Primary
 
-#### 限定自动装配的bean
+##### 限定自动装配的bean
 
 - Qualifer配置ID
 - Qualifer指定装配的ID
 
-### Bean的作用域
+#### Bean的作用域
 
 - 单例（Singleton）：在整个应用中，只创建一个bean实例
 - 原型（Prototype）：每次注入或者通过Spring应用上下文获取的时候，都会创建一个新的bean实例、
 - 会话（Session）：在Web应用中，为每个会话创建一个bean实例
 - 请求（Request）：在Web应用中，为每个请求创建一个Bean实例
 
-#### 会话和请求作用域的代理
+##### 会话和请求作用域的代理
 
 - 一个单例bean需要注入请求或会话bean，但是这时请求或会话的作用域bean还不存在，就无法注入
 - 通过注入一个代理，当要调用方法时才会去调用真正的bean的方法
 - 分为针对于接口的代理和类的代理
 
-### SpEL
+#### SpEL
 
 - 使用Bean的ID来引用bean
 - 调用方法和访问对象的属性
@@ -167,7 +167,7 @@ spring从两个角度来实现自动化装配
 - 正则表达式匹配
 - 集合操作
 
-#### T()运算符
+##### T()运算符
 
 - `#{T(System).currentTimeMillis()}`：在运行时，动态调用cuurentTimeMills()方法，获取当前时间
 - T()将Sysytem视为Java中对应的类型
@@ -227,3 +227,55 @@ public extraMethod loggingExtraMethod;//这必须是一个接口类型
 - 通过@Order设置优先级
 - 数值越小（可以是负数），优先级越大
 
+## 基于XML方式
+
+1. 注册切面的bean
+2. 配置切点表达式
+3. 配置切面及通知
+
+# Spring的事务管理
+
+- 声明式事务和编程式事务
+
+## 基于注解方式
+
+### 启动事务
+
+1. 配置事务管理器
+2. 启动事务注解
+3. 在对应方法上增加@Transactional注解
+
+### propagation
+
+- 当一个事务方法调用另一个事务方法时，必须指定事务应该如何传播
+- 一共有七种取值
+- REQUIRED：默认取值，使用调用方法的事务
+- REQUIRES_NEW：表示该方法必须启动一个新事务，并在自己的事务内运行，调用事务方法的事务被挂起
+
+![âREQUIRES_NEWâçå¾çæç´¢ç»æ](http://img.wandouip.com/crawler/article/2019519/9ddc741cf48affb8371fd15a25851d4b)
+
+### isolation
+
+- 指定事务的隔离级别
+
+### noRollbackFor
+
+- 默认情况下，Spring对所有运行时异常进行回滚；
+- 可以通过noRollbackFor规定不回滚的异常
+
+### readOnly
+
+- 指定事务是否是只读
+- 表示事务只读数据但是不更新数据
+- 可以帮助数据库引擎优化事务，一个只读数据库的方法，应该设置该属性为true
+
+### timeout
+
+- 指定强制回滚前，事务可以占用的时间
+- 方法占用的时间超时，会强制回滚，即使没有抛出异常
+
+## 基于XML文件方式
+
+1. 配置事务管理器
+2. 配置事务属性
+3. 配置事务切入点，把事务切入点和事务属性关联在一起

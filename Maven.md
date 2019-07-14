@@ -63,9 +63,9 @@ groupId定义了项目属于哪个组,main中的java包结构；artifactId定义
 
 - ### 本地仓库与远程仓库
 
-- ### settings.xml中通过该<mirrors/>设置镜像仓库
+- ### settings.xml中通过该`<mirrors/>`设置镜像仓库
 
-- ### settings.xml中通过<localRepository/>修改本地仓库的位置,默认在C盘
+- ### settings.xml中通过`<localRepository/>`修改本地仓库的位置,默认在C盘
 
 ## Archetype
 
