@@ -325,3 +325,47 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 - SqlSessionFactory：单例作用域
 - SqlSession：非线程安全，请求作用域或方法作用域
 - 映射器实例：方法作用域，最大作用域是和SqlSession相同
+
+# mybatis-generator
+
+1. MBG 会自动合并已经存在并且和新生成的文件重名的 XML。MBG 不会覆盖您对已经生成xml所做的修改。
+2. MBG **不会** 合并 Java 文件,他可以覆盖已经存在的文件或者保存新生成的文件为一个不同的唯一的名字。 
+
+### 必要指定元素
+
+- jdbcConnection：定义如何连接数据库
+- javaModelGenerator：指定生成 Java 模型对象所属的包
+- sqlMapGenerator：指定生成 SQL 映射文件所属的包和的目标项目
+
+### maven启动MGB
+
+- 在pom.xml中配置：
+
+  ```
+  <plugin>
+        	  <groupId>org.mybatis.generator</groupId>
+        	  <artifactId>mybatis-generator-maven-plugin</artifactId>
+            <version>版本号</version>
+  </plugin>
+  ```
+
+- `mvn mybatis-generator:generate`来执行
+
+### 复杂SQL
+
+- 通过Example类的内部静态类来实现复杂查询
+
+- 先要通过Example类创建Criteria类
+
+  ```
+    TestTableExample example = new TestTableExample();
+    example.createCriteria().andField1EqualTo(5);
+    
+    			       or
+    			
+    TestTableExample example = new TestTableExample();
+    example.or().andField1EqualTo(5);
+  ```
+
+  
+

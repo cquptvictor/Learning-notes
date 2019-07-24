@@ -32,40 +32,39 @@ maven的类加载框架，使用该框架来加载自己的类库
 
 ### mvn clean  compile
 
-清理输出目录target/，并编译项目主代码
+- 清理输出目录target，并编译项目主代码
+
 
 ### mvn clean test
 
-执行测试用例
+- 执行测试用例
+
 
 ### mvn clean package
 
-默认将项目打包为jar；
+- 默认将项目打包为jar；
 
-maven在打包前会执行编译测试等操作；
 
-main方法会被忽略
+- maven在打包前会执行编译测试等操作；
+
+
+- main方法会被忽略
+
 
 ### mvn clean install
 
-将项目输出的jar安装到本地的Maven仓库
+- 将项目输出的jar安装到本地的Maven仓库
+
 
 **上述四个命令，依照顺序，每次执行后面的命令时都会重新执行一次前面的命令**
 
 ## Maven的配置
 
-- ### groupId，artifactId，version
-
-
-groupId定义了项目属于哪个组,main中的java包结构；artifactId定义了当前Maven项目在组中唯一的ID，项目的根目录名称
-
-；version指定项目当前的版本
-
-- ### 本地仓库与远程仓库
-
-- ### settings.xml中通过该`<mirrors/>`设置镜像仓库
-
-- ### settings.xml中通过`<localRepository/>`修改本地仓库的位置,默认在C盘
+- groupId，artifactId，version
+- groupId定义了项目属于哪个组,main中的java包结构；artifactId定义了当前Maven项目在组中唯一的ID，项目的根目录名称；version指定项目当前的版本
+- 本地仓库与远程仓库
+- settings.xml中通过该`<mirrors/>`设置镜像仓库
+- settings.xml中通过`<localRepository/>`修改本地仓库的位置,默认在C盘
 
 ## Archetype
 
