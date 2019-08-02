@@ -367,5 +367,40 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
     example.or().andField1EqualTo(5);
   ```
 
-  
 
+## Mybatis运行流程
+
+1. 创建sqlSessionFactory对象
+
+   ![1564300658670](C:\Users\victor\AppData\Roaming\Typora\typora-user-images\1564300658670.png)
+
+2. 得到sqlSession对象
+
+   ![1564300633975](C:\Users\victor\AppData\Roaming\Typora\typora-user-images\1564300633975.png)
+
+3. getMapper获取代理对象
+
+   ![1564300868069](C:\Users\victor\AppData\Roaming\Typora\typora-user-images\1564300868069.png)
+
+4. 执行查询
+
+![1564301919358](C:\Users\victor\AppData\Roaming\Typora\typora-user-images\1564301919358.png)
+
+![1564301986369](C:\Users\victor\AppData\Roaming\Typora\typora-user-images\1564301986369.png)
+
+### 插件
+
+#### 四大对象
+
+- Executor、ParameterHandler、ResultSetHandler、StatementHandler
+- 在创建四大对象后，会调用Interceptor对其进行包装
+
+#### 实现
+
+- 实现Interceptor接口
+- 配置注解
+- 在配置文件中注册
+
+#### 多个插件
+
+- 配置文件中先配置的Interceptor先包装，后拦截

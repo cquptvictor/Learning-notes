@@ -173,6 +173,12 @@ spring从两个角度来实现自动化装配
 - T()将Sysytem视为Java中对应的类型
 - 可以通过T()操作符来调用一些静态方法和静态常量
 
+### 使用properties配置文件
+
+- Spring可以通过`<context:property-placeholder location="classpath:properties/*.properties"/>`来加载properties文件
+- 通过${key}来调用
+- Spring只会加载一次properties配置文件，后续的加载无效
+
 # AOP
 
 - 通过AOP功能，可以把之前粉丝啊在应用各处的行为放入可重用的模块中，程序员需要显示地声明在何处如何应用该行为
