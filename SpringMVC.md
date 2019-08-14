@@ -283,5 +283,24 @@
 
 ## SpringMVC的IOC和Spring的IOC
 
-- SpringMVC的IOC容器可以引用Spring的IOC容器中的bean，反之则不行
+- SpringMVC的IOC容器可以引用Spring的IOC容器中的bean，反之则不
 
+## 数据绑定
+
+#### 普通的字段
+
+- 字段的名字和form表单中的name相同
+- 通过@RequestParam注解
+
+### Map属性
+
+- form中的name为`字段[key]`
+
+### List属性
+
+- form中name为`字段[数字]`
+
+### Set属性
+
+- form中为`字段[数字]`
+- 需要先在set中添加相应数量的对象
