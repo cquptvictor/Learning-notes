@@ -230,6 +230,7 @@ JDBC或Managed事务管理器;或实现transactionFactory接口来完成自定�
 - 如果参数为List，Set，数组，也会被封装成Map，通过collection[i],array[i],list[i]来获得值，也可以通过@Param来指定key
 - 在参数是Map时，括号中为Map的key值
 - 在参数是pojo时，括号中为pojo的属性名
+- 对于可能有个空值的列，设置jdbcType。因为在把Java类型自动转化为数据库类型的时候，一旦传入的是null，它就无法准确判断类型应该是什么，可能产生类型转换错误
 
 ## #{}和${}的区别与联系
 
