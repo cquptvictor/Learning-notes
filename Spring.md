@@ -239,6 +239,28 @@ public extraMethod loggingExtraMethod;//这必须是一个接口类型
 2. 配置切点表达式
 3. 配置切面及通知
 
+## SpringAOP和AspectJ
+
+- SpirngAOP借助了AspectJ的注解和切入点解析以及匹配
+- SpringAOP只提供方法级别的连接点，AspectJ提供字段和构造器接入点
+- SpringAOP的底层实现任然是基于代理的
+
+## AOP的底层实现
+
+- 默认情况下，实现了接口的采用jdk动态代理，否则采用cglib
+
+### cglib
+
+- 采用继承的方式实现代理
+- 不能代理final方法
+
+### jdk动态代理
+
+- 采用实现接口的方式实现代理
+
+- 只能代理实现了接口的类的接口方法
+
+
 # Spring的事务管理
 
 - 声明式事务和编程式事务
